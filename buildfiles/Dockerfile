@@ -1,8 +1,12 @@
-FROM openjdk:17-jdk-slim
+FROM arm64v8/openjdk:17-jdk
 
-RUN apt-get update && apt-get install -y pulseaudio
+LABEL org.opencontainers.image.source=https://github.com/polemonLX/musique-agent
 
 WORKDIR /musique
+
+RUN apt-get update && apt-get install -y apt-utils
+RUN apt-get install -y libc-bin && dpkg --configure -a
+RUN apt-get install -y pulseaudio
 
 RUN mkdir -p lib
 
@@ -15,21 +19,3 @@ CMD ["java", "-jar", "lib/musique-agent.jar"]
 
 ## LINUX
 # docker run -e PULSE_SERVER=localhost musique-agent
-
-
-
-
-
-## INSTALLATION
-# systemctl ...
-# sudo apt-get install docker.io
-# docker login ghcr.io
-# docker pull musique-agent
-# docker run -e PULSE_SERVER=localhost musique-agent -e username polemonunidade password 123456789
-
-# .sh /scriptinstall.sh
-
-
-## RUNTIME
-# docker run -e PULSE_SERVER=localhost musique-agent -e username polemonunidade password 123456789
-
