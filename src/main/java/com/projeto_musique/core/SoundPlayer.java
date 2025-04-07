@@ -15,4 +15,9 @@ public interface SoundPlayer {
      */
     void play(SoundData soundData);
 
+    /**
+     * Stop the sound.
+     */
+    void stop();
+
 }

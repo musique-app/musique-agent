@@ -4,12 +4,13 @@ import com.projeto_musique.core.ConnectionMode;
 import com.projeto_musique.core.Engine;
 import com.projeto_musique.core.SoundPlayer;
 import com.projeto_musique.core.player.MP3;
-import com.projeto_musique.models.exceptions.ConnectionException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Bootstrap class for the project.
  * Only the Engine should be wired up.
  */
+@Slf4j
 public class Bootstrap {
 
     /**
@@ -17,13 +18,13 @@ public class Bootstrap {
      *
      * @return Engine for this JVM
      */
-    public static Engine setup() throws ConnectionException {
+    public static Engine setup() {
+        if (log.isInfoEnabled())
+            log.info("Bootstrapping the application...");
         SoundPlayer soundPlayer = getSoundOutput();
         ConnectionMode mode = getConnectionMode();
 
-        Engine engine = new Engine(soundPlayer, mode);
-        if (!engine.checkConnection()) throw new ConnectionException("Connection cannot be established");
-        return engine;
+        return new Engine(soundPlayer, mode);
     }
 
     /**
@@ -34,6 +35,8 @@ public class Bootstrap {
      * @return SoundOutput
      */
     private static SoundPlayer getSoundOutput() {
+        if (log.isDebugEnabled())
+            log.debug("Using sound player: {}" , "MP3");
         return new MP3();
     }
 
@@ -44,6 +47,8 @@ public class Bootstrap {
      * @return ConnectionMode
      */
     private static ConnectionMode getConnectionMode() {
+        if(log.isDebugEnabled())
+            log.debug("Connection mode: {}" , "ONLINE");
         return ConnectionMode.ONLINE;
     }
 

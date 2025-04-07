@@ -4,6 +4,7 @@ import com.projeto_musique.models.LoginResult;
 import com.projeto_musique.models.SoundData;
 import com.projeto_musique.models.exceptions.ConnectionException;
 import com.projeto_musique.models.exceptions.RequestException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This is the core of the application. All the process should pass in this class.
@@ -12,12 +13,18 @@ import com.projeto_musique.models.exceptions.RequestException;
  * <p>
  * This class is also responsible to check the connection with the network if it operates in online mode.
  */
+@Slf4j
 public class Engine {
 
     /**
      * Login logic for the app.
      */
     private final Login login;
+
+    /**
+     * Util object to check if the connection is available.
+     */
+    private final ConnectionChecker connectionChecker;
 
     /**
      * The specific output.
@@ -31,6 +38,7 @@ public class Engine {
 
     public Engine(SoundPlayer soundPlayer, ConnectionMode connectionMode) {
         this.login = new Login();
+        this.connectionChecker = new ConnectionChecker();
         this.soundPlayer = soundPlayer;
         this.connectionMode = connectionMode;
     }
@@ -38,37 +46,41 @@ public class Engine {
     /**
      * Run the whole application.
      *
-     * @throws ConnectionException if connection mode is set to 0, and the connection is broken while running
+     * @throws Exception if anything goes wrong.
      */
-    public void run() throws ConnectionException {
-        try {
-            LoginResult loginResult = login.request("polemonunidade", "123456789");
-            // TODO: 19/03/2025 Implementation
-            while (true) {
-                String rawStreamUrl = loginResult.getUser().getCompany().getStream();
-                String streamUrl = rawStreamUrl.substring(9, rawStreamUrl.indexOf(".mp3\"") + 4);
-                SoundData soundData = new SoundData(streamUrl);
+    @SuppressWarnings("ALL")
+    public void run() throws Exception {
+        if (log.isInfoEnabled()) log.info("Application started in {} mode", connectionMode.name());
+
+        while (true) {
+            try {
+                SoundData soundData = getSoundData();
                 soundPlayer.play(soundData);
+            } catch (ConnectionException | RequestException e) {
+                log.error(e.getMessage(), e);
+                Thread.sleep(5000);
             }
-        } catch (RequestException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    /**
-     * Check if connection is available.
-     * If connection mode is set higher than 0, the response will always be true.
-     *
-     * @return true if connection mode is set to be bigger than 0. If connection mode is 0, returns true if connection
-     * is available.
-     */
-    public boolean checkConnection() {
-        if (connectionMode == ConnectionMode.ONLINE) {
-            // TODO: 17/03/2025 Check connection. For now it only returns true for test purpose
-            return true;
+    private SoundData getSoundData() throws ConnectionException, RequestException {
+        switch (connectionMode) {
+            case ONLINE -> {
+                if (!connectionChecker.check()) throw new ConnectionException("Connection cannot be established");
+                LoginResult loginResult = login.request("polemonunidade", "123456789");
+                String rawStreamUrl = loginResult.getUser().getCompany().getStream();
+                String streamUrl = rawStreamUrl.substring(9, rawStreamUrl.indexOf(".mp3\"") + 4);
+                return new SoundData(streamUrl);
+            }
+            case OFFLINE -> {
+                // TODO: 02/04/2025 Implement OFFLINE mode
+            }
+            case ONLINE_AND_OFFLINE -> {
+                // TODO: 02/04/2025 Implement OFFLINE/ONLINE mode
+            }
         }
 
-        return true;
+        throw new IllegalArgumentException("Invalid connection mode");
     }
 
 }

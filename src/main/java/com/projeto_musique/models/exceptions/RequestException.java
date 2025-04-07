@@ -9,4 +9,8 @@ public class RequestException extends Exception {
         super(message);
     }
 
+    public RequestException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }
