@@ -1,16 +1,18 @@
-FROM arm64v8/openjdk:17-jdk
+FROM arm64v8/openjdk:17-slim
 
-LABEL org.opencontainers.image.source=https://github.com/polemonLX/musique-agent
+LABEL org.opencontainers.image.source = "https://github.com/musique-app/musique-agent"
+
+RUN apt-get update && apt-get install -y \
+    pulseaudio \
+    && rm -rf /var/lib/apt/lists/* \
 
 WORKDIR /musique
-
-RUN apt-get update && apt-get install -y apt-utils
-RUN apt-get install -y libc-bin && dpkg --configure -a
-RUN apt-get install -y pulseaudio
 
 RUN mkdir -p lib
 
 COPY ../target/musique-agent.jar lib/musique-agent.jar
+
+ENV PULSE_SERVER=unix:/run/pulse/native
 
 CMD ["java", "-jar", "lib/musique-agent.jar"]
 

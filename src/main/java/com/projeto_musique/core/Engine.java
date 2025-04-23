@@ -66,7 +66,7 @@ public class Engine {
     private SoundData getSoundData() throws ConnectionException, RequestException {
         switch (connectionMode) {
             case ONLINE -> {
-                if (!connectionChecker.check()) throw new ConnectionException("Connection cannot be established");
+               // if (!connectionChecker.check()) throw new ConnectionException("Connection cannot be established");
                 LoginResult loginResult = login.request("polemonunidade", "123456789");
                 String rawStreamUrl = loginResult.getUser().getCompany().getStream();
                 String streamUrl = rawStreamUrl.substring(9, rawStreamUrl.indexOf(".mp3\"") + 4);
