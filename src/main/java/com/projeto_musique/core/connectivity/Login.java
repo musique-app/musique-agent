@@ -1,4 +1,4 @@
-package com.projeto_musique.core;
+package com.projeto_musique.core.connectivity;
 
 import com.projeto_musique.http.Client;
 import com.projeto_musique.http.Method;

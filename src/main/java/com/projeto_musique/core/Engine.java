@@ -1,5 +1,8 @@
 package com.projeto_musique.core;
 
+import com.projeto_musique.core.connectivity.ConnectionChecker;
+import com.projeto_musique.core.connectivity.Login;
+import com.projeto_musique.core.connectivity.SocketManager;
 import com.projeto_musique.models.LoginResult;
 import com.projeto_musique.models.SoundData;
 import com.projeto_musique.models.exceptions.ConnectionException;
@@ -22,6 +25,11 @@ public class Engine {
     private final Login login;
 
     /**
+     * Socket manager.
+     */
+    private final SocketManager socketManager;
+
+    /**
      * Util object to check if the connection is available.
      */
     private final ConnectionChecker connectionChecker;
@@ -38,6 +46,7 @@ public class Engine {
 
     public Engine(SoundPlayer soundPlayer, ConnectionMode connectionMode) {
         this.login = new Login();
+        this.socketManager = new SocketManager();
         this.connectionChecker = new ConnectionChecker();
         this.soundPlayer = soundPlayer;
         this.connectionMode = connectionMode;
@@ -55,6 +64,11 @@ public class Engine {
         while (true) {
             try {
                 SoundData soundData = getSoundData();
+                if (soundData == null) {
+                    log.error("Unable to get sound data");
+                    Thread.sleep(5000);
+                    continue;
+                }
                 soundPlayer.play(soundData);
             } catch (ConnectionException | RequestException e) {
                 log.error(e.getMessage(), e);
@@ -66,8 +80,15 @@ public class Engine {
     private SoundData getSoundData() throws ConnectionException, RequestException {
         switch (connectionMode) {
             case ONLINE -> {
-               // if (!connectionChecker.check()) throw new ConnectionException("Connection cannot be established");
-                LoginResult loginResult = login.request("polemonunidade", "123456789");
+                // if (!connectionChecker.check()) throw new ConnectionException("Connection cannot be established");
+                String username = System.getenv("USERNAME");
+                String password = System.getenv("PASSWORD");
+                LoginResult loginResult = login.request(username, password);
+                if (loginResult == null) return null;
+
+                boolean success = socketManager.openSocket(loginResult.getToken().getAccessToken());
+                if (!success) return null;
+
                 String rawStreamUrl = loginResult.getUser().getCompany().getStream();
                 String streamUrl = rawStreamUrl.substring(9, rawStreamUrl.indexOf(".mp3\"") + 4);
                 return new SoundData(streamUrl);
