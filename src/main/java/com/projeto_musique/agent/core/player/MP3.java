@@ -1,7 +1,7 @@
-package com.projeto_musique.core.player;
+package com.projeto_musique.agent.core.player;
 
-import com.projeto_musique.core.SoundPlayer;
-import com.projeto_musique.models.SoundData;
+import com.projeto_musique.agent.core.SoundPlayer;
+import com.projeto_musique.agent.models.SoundData;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import lombok.extern.slf4j.Slf4j;
 

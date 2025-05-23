@@ -1,9 +1,9 @@
-package com.projeto_musique;
+package com.projeto_musique.agent;
 
-import com.projeto_musique.core.ConnectionMode;
-import com.projeto_musique.core.Engine;
-import com.projeto_musique.core.SoundPlayer;
-import com.projeto_musique.core.player.MP3;
+import com.projeto_musique.agent.core.ConnectionMode;
+import com.projeto_musique.agent.core.Engine;
+import com.projeto_musique.agent.core.SoundPlayer;
+import com.projeto_musique.agent.core.player.MP3;
 import lombok.extern.slf4j.Slf4j;
 
 /**

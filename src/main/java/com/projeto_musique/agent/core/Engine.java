@@ -1,12 +1,12 @@
-package com.projeto_musique.core;
+package com.projeto_musique.agent.core;
 
-import com.projeto_musique.core.connectivity.ConnectionChecker;
-import com.projeto_musique.core.connectivity.Login;
-import com.projeto_musique.core.connectivity.SocketManager;
-import com.projeto_musique.models.LoginResult;
-import com.projeto_musique.models.SoundData;
-import com.projeto_musique.models.exceptions.ConnectionException;
-import com.projeto_musique.models.exceptions.RequestException;
+import com.projeto_musique.agent.core.connectivity.ConnectionChecker;
+import com.projeto_musique.agent.core.connectivity.Login;
+import com.projeto_musique.agent.core.connectivity.SocketManager;
+import com.projeto_musique.agent.models.LoginResult;
+import com.projeto_musique.agent.models.SoundData;
+import com.projeto_musique.agent.models.exceptions.ConnectionException;
+import com.projeto_musique.agent.models.exceptions.RequestException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -69,7 +69,8 @@ public class Engine {
                     Thread.sleep(5000);
                     continue;
                 }
-                soundPlayer.play(soundData);
+               // soundPlayer.play(soundData);
+                while (true) Thread.onSpinWait();
             } catch (ConnectionException | RequestException e) {
                 log.error(e.getMessage(), e);
                 Thread.sleep(5000);

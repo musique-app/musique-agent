@@ -1,6 +1,6 @@
-package com.projeto_musique.core;
+package com.projeto_musique.agent.core;
 
-import com.projeto_musique.models.SoundData;
+import com.projeto_musique.agent.models.SoundData;
 
 /**
  * Interface for a sound output player.

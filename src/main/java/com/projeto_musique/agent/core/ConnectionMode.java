@@ -1,4 +1,4 @@
-package com.projeto_musique.core;
+package com.projeto_musique.agent.core;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.projeto_musique.models;
+package com.projeto_musique.agent.models;
 
 /**
  * Sound data to be passed to the sound processor.

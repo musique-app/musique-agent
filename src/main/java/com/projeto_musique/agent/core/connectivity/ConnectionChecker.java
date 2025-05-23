@@ -1,9 +1,9 @@
-package com.projeto_musique.core.connectivity;
+package com.projeto_musique.agent.core.connectivity;
 
-import com.projeto_musique.http.Client;
-import com.projeto_musique.http.Method;
-import com.projeto_musique.models.CheckConnectionResponse;
-import com.projeto_musique.models.exceptions.RequestException;
+import com.projeto_musique.agent.http.Client;
+import com.projeto_musique.agent.http.Method;
+import com.projeto_musique.agent.models.CheckConnectionResponse;
+import com.projeto_musique.agent.models.exceptions.RequestException;
 
 /**
  * Check if connection is available.

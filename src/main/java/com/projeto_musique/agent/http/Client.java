@@ -1,7 +1,7 @@
-package com.projeto_musique.http;
+package com.projeto_musique.agent.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.projeto_musique.models.exceptions.RequestException;
+import com.projeto_musique.agent.models.exceptions.RequestException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

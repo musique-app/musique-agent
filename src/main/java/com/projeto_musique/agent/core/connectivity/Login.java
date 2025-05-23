@@ -1,10 +1,10 @@
-package com.projeto_musique.core.connectivity;
+package com.projeto_musique.agent.core.connectivity;
 
-import com.projeto_musique.http.Client;
-import com.projeto_musique.http.Method;
-import com.projeto_musique.models.LoginRequest;
-import com.projeto_musique.models.LoginResult;
-import com.projeto_musique.models.exceptions.RequestException;
+import com.projeto_musique.agent.http.Client;
+import com.projeto_musique.agent.http.Method;
+import com.projeto_musique.agent.models.LoginRequest;
+import com.projeto_musique.agent.models.LoginResult;
+import com.projeto_musique.agent.models.exceptions.RequestException;
 import lombok.extern.slf4j.Slf4j;
 
 /**

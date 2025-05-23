@@ -1,4 +1,4 @@
-package com.projeto_musique.models;
+package com.projeto_musique.agent.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,6 +1,6 @@
-package com.projeto_musique;
+package com.projeto_musique.agent;
 
-import com.projeto_musique.core.Engine;
+import com.projeto_musique.agent.core.Engine;
 import lombok.extern.slf4j.Slf4j;
 
 /**

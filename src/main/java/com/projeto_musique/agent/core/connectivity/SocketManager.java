@@ -1,4 +1,4 @@
-package com.projeto_musique.core.connectivity;
+package com.projeto_musique.agent.core.connectivity;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
