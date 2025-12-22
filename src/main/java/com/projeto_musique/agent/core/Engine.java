@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * This class is also responsible to check the connection with the network if it operates in online mode.
  */
 @Slf4j
-public class Engine {
+public final class Engine {
 
     /**
      * Login logic for the app.
@@ -44,6 +44,11 @@ public class Engine {
      */
     private final ConnectionMode connectionMode;
 
+    /**
+     * Indicates if the application is running.
+     */
+    private boolean running;
+
     public Engine(SoundPlayer soundPlayer, ConnectionMode connectionMode) {
         this.login = new Login();
         this.socketManager = new SocketManager();
@@ -59,9 +64,12 @@ public class Engine {
      */
     @SuppressWarnings("ALL")
     public void run() throws Exception {
-        if (log.isInfoEnabled()) log.info("Application started in {} mode", connectionMode.name());
+        if (log.isInfoEnabled())
+            log.info("Application started in {} mode", connectionMode.name());
 
-        while (true) {
+        running = true;
+
+        while (running) {
             try {
                 SoundData soundData = getSoundData();
                 if (soundData == null) {
@@ -69,7 +77,8 @@ public class Engine {
                     Thread.sleep(5000);
                     continue;
                 }
-               // soundPlayer.play(soundData);
+
+                soundPlayer.play(soundData);
                 while (true) Thread.onSpinWait();
             } catch (ConnectionException | RequestException e) {
                 log.error(e.getMessage(), e);
@@ -78,17 +87,31 @@ public class Engine {
         }
     }
 
+    public void stop() {
+        running = false;
+        soundPlayer.stop();
+        socketManager.closeSocket();
+    }
+
+    public void playAd() {
+        soundPlayer.playAd();
+    }
+
     private SoundData getSoundData() throws ConnectionException, RequestException {
         switch (connectionMode) {
             case ONLINE -> {
-                // if (!connectionChecker.check()) throw new ConnectionException("Connection cannot be established");
+                if (!connectionChecker.check())
+                    throw new ConnectionException("Connection cannot be established");
+
                 String username = System.getenv("USERNAME");
                 String password = System.getenv("PASSWORD");
                 LoginResult loginResult = login.request(username, password);
-                if (loginResult == null) return null;
+                if (loginResult == null)
+                    return null;
 
                 boolean success = socketManager.openSocket(loginResult.getToken().getAccessToken());
-                if (!success) return null;
+                if (!success)
+                    return null;
 
                 String rawStreamUrl = loginResult.getUser().getCompany().getStream();
                 String streamUrl = rawStreamUrl.substring(9, rawStreamUrl.indexOf(".mp3\"") + 4);

@@ -2,13 +2,15 @@ package com.projeto_musique.agent.core.connectivity;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 
 /**
- *
+ * Manages a Socket.IO connection to a specified server.
  */
+@Slf4j
 public class SocketManager {
 
     private Socket socket;
@@ -24,21 +26,22 @@ public class SocketManager {
         try {
             socket = IO.socket("https://portal-musique-backend.herokuapp.com/", options);
 
-            socket.on(Socket.EVENT_CONNECT, args1 -> {
+            socket.on(Socket.EVENT_CONNECT, args -> {
                 socket.emit("identification", token);
-                System.out.println("Connected!");
+                if (log.isDebugEnabled())
+                    log.debug("Connected!");
                 latch.countDown();
             });
 
-            socket.on(Socket.EVENT_CONNECT_ERROR, args1 -> {
-                for (Object arg : args1) {
+            socket.on(Socket.EVENT_CONNECT_ERROR, args -> {
+                for (Object arg : args) {
                     System.err.println(arg);
                 }
-                System.err.println("Connect error:");
+                log.error("Connect error:");
                 latch.countDown();
             });
 
-            socket.on(Socket.EVENT_DISCONNECT, args1 -> System.err.println("Disconnected"));
+            socket.on(Socket.EVENT_DISCONNECT, args -> log.error("Disconnected"));
 
             socket.connect();
 
@@ -50,7 +53,7 @@ public class SocketManager {
     }
 
     public void closeSocket() {
-
+        socket.close();
     }
 
 }

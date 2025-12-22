@@ -21,7 +21,8 @@ public class MP3 implements SoundPlayer {
      */
     @Override
     public void play(SoundData soundData) {
-        if(log.isDebugEnabled()) log.debug("Playing MP3 sound from: {}", soundData.streamURL());
+        if (log.isDebugEnabled())
+            log.debug("Playing MP3 sound from: {}", soundData.streamURL());
 
         try {
             InputStream audioStream = new URL(soundData.streamURL()).openStream();
@@ -37,9 +38,11 @@ public class MP3 implements SoundPlayer {
      */
     @Override
     public void stop() {
-        if(log.isDebugEnabled()) log.debug("Stopping MP3 sound");
+        if (log.isDebugEnabled())
+            log.debug("Stopping MP3 sound");
 
-        if (player != null) player.stop();
+        if (player != null)
+            player.stop();
     }
 
 }

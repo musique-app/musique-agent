@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            if(log.isInfoEnabled())
+            if (log.isInfoEnabled())
                 log.info("Starting the app...");
 
             Engine engine = Bootstrap.setup();

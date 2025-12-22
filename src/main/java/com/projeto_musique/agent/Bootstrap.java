@@ -11,7 +11,10 @@ import lombok.extern.slf4j.Slf4j;
  * Only the Engine should be wired up.
  */
 @Slf4j
-public class Bootstrap {
+final class Bootstrap {
+
+    private Bootstrap() {
+    }
 
     /**
      * Setup of the whole application.
@@ -21,8 +24,12 @@ public class Bootstrap {
     public static Engine setup() {
         if (log.isInfoEnabled())
             log.info("Bootstrapping the application...");
+
         SoundPlayer soundPlayer = getSoundOutput();
         ConnectionMode mode = getConnectionMode();
+
+        if (log.isInfoEnabled())
+            log.info("Application bootstrapped successfully.");
 
         return new Engine(soundPlayer, mode);
     }
@@ -36,7 +43,8 @@ public class Bootstrap {
      */
     private static SoundPlayer getSoundOutput() {
         if (log.isDebugEnabled())
-            log.debug("Using sound player: {}" , "MP3");
+            log.debug("Using sound player: {}", "MP3");
+
         return new MP3();
     }
 
@@ -47,8 +55,9 @@ public class Bootstrap {
      * @return ConnectionMode
      */
     private static ConnectionMode getConnectionMode() {
-        if(log.isDebugEnabled())
-            log.debug("Connection mode: {}" , "ONLINE");
+        if (log.isDebugEnabled())
+            log.debug("Connection mode: {}", "ONLINE");
+
         return ConnectionMode.ONLINE;
     }
 
