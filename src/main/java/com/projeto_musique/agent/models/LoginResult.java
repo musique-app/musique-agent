@@ -20,8 +20,11 @@ public class LoginResult {
     @JsonProperty("user")
     private User user;
 
-    @JsonProperty("token")
-    private Token token;
+    @JsonProperty("accessToken")
+    private AccessToken accessToken;
+
+    @JsonProperty("refreshToken")
+    private AccessToken refreshToken;
 
     @Getter
     @Setter
@@ -119,11 +122,22 @@ public class LoginResult {
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Token {
+    public static class AccessToken {
+
+        private String token;
 
         private String expiresIn;
 
-        private String accessToken;
+    }
+
+    @Getter
+    @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class RefreshToken {
+
+        private String token;
+
+        private String expiresIn;
 
     }
 

@@ -4,7 +4,7 @@ import com.projeto_musique.agent.core.Engine;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Main class for the agent of Projeto Musique.
+ * Main class for the agent of Musique.
  * It calls the bootstrap and gets the engine of the agent.
  * It then starts the engine.
  * <p>
@@ -15,11 +15,12 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            if (log.isInfoEnabled())
-                log.info("Starting the app...");
+            log.info("Starting the app...");
 
             Engine engine = Bootstrap.setup();
-            engine.run();
+            engine.start();
+
+            log.info("App started successfully.");
         } catch (Exception e) {
             log.error("Error starting the app: {}", e.getMessage(), e);
             throw new RuntimeException(e);
