@@ -1,6 +1,6 @@
 FROM arm64v8/openjdk:17-slim
 
-LABEL org.opencontainers.image.source = "https://github.com/musique-app/musique-agent"
+LABEL org.opencontainers.image.source="https://github.com/musique-app/musique-agent"
 
 RUN apt-get update && apt-get install -y \
     pulseaudio \
