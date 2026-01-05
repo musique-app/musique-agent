@@ -7,6 +7,8 @@ import io.socket.client.Socket;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -48,10 +50,16 @@ public class SocketManager {
     public boolean openSocket(String accessToken) {
         log.info("Opening socket for access token: {}", accessToken);
 
-        IO.Options options = new IO.Options();
-        options.forceNew = true;
-        options.reconnection = true;
-        options.timeout = 5000;
+        IO.Options options = IO.Options.builder()
+                .setPath("/socket.io")
+                .setForceNew(true)
+                .setReconnection(true)
+                .setTimeout(5000)
+                .setTransports(new String[]{"websocket"})
+                .setExtraHeaders(Map.of(
+                        "Authorization", List.of("Bearer " + accessToken)
+                ))
+                .build();
 
         CountDownLatch latch = new CountDownLatch(1);
 
@@ -60,17 +68,19 @@ public class SocketManager {
             socket = IO.socket(Properties.BASE_URL, options);
 
             // On connect
-            socket.on(Socket.EVENT_CONNECT, args -> log.debug("Connected event"));
+            socket.on(Socket.EVENT_CONNECT, args -> log.debug("Socket connected"));
 
             // On identify
             socket.on("identify", args -> {
                 socket.emit("identification", accessToken);
-                log.debug("Identify");
-                latch.countDown();
+                log.debug("Socket identify");
             });
 
             // On join
-            socket.on("join", args -> log.debug("Joined: {}", args[0]));
+            socket.on("join", args -> {
+                log.debug("Socket joined: {}", args[0]);
+                latch.countDown();
+            });
 
             // On connect error
             socket.on(Socket.EVENT_CONNECT_ERROR, args -> {

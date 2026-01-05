@@ -24,7 +24,7 @@
 
     <root level="TRACE">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="LOKI" />
+       <!-- <appender-ref ref="LOKI" /> -->
     </root>
 
 </configuration>
